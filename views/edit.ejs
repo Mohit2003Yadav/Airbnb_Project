@@ -1,0 +1,84 @@
+<% layout('/layout/boilerplate') -%>
+
+    <body>
+        <div class="row ">
+            <div class="col-8 offset-2">
+                <h2>Update the datails:</h2>
+                <form action="/listings/<%=listitem._id%>?_method=PUT" method="post" class="needs-validation"
+                    novalidate enctype="multipart/form-data">
+
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title</label>
+                        <input required id="title" class="form-control border border-dark" type="text"
+                            name="listing[title]" value="<%=listitem.title%>">
+                        <div class="invalid-feedback">
+                            This field cannot be empty
+                        </div>
+                    </div>
+
+
+
+                    <div class="mb-3 " class="form-label"><label for="description">Description</label>
+                        <textarea id="description" class="form-control border border-dark" name="listing[description]"
+                            rows="2" cols="35" id="" required><%=listitem.description%></textarea>
+                        <div class="invalid-feedback">
+                            This field can not empty
+                        </div>
+                    </div>
+
+                    <div class="mb-3"> <label class="form-label" for="ImageUrl">Image/URL</label>
+                        <input class="form-control border border-dark" id="ImageUrl" type="file" name="listing[image][url]"
+                             >
+                        <div class="invalid-feedback">
+                            This field can not empty
+                        </div>
+                        <div class="invalid-feedback">
+                            This field can not empty
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4 col-md-4">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <input id="price" class="form-control border border-dark" name="listing[price]"
+                                    type="number" value="<%=listitem.price%>" required>
+                                <div class="invalid-feedback">
+                                    This field can not empty
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-8">
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input id="location" class="form-control border border-dark" name="listing[location]"
+                                    type="text" value="<%=listitem.location%>" required>
+                                <div class="invalid-feedback">
+                                    This field can not empty
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input id="country" class="form-control border border-dark " name="listing[country]" type="text"
+                            value="<%=listitem.country%>" required>
+                        <div class="invalid-feedback">
+                            This field can not empty
+                        </div>
+                    </div>
+
+                    <button class="btn btn-dark">Update</button>
+                </form>
+            </div>
+
+        </div>
+
+        <script src="/js/script.js"></script>
+    </body>
