@@ -2,7 +2,11 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 };
-
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+console.log("DB URL:", process.env.AtlasDB_URL ? "✅ Loaded" : "❌ Not Loaded");
+const Db_Url= process.env.AtlasDB_URL;
 
 let express = require("express");
 let app = express();
@@ -13,6 +17,7 @@ let engine = require("ejs-mate");
 let ExpressError = require("./utils/ExpressError.js");
 let Review = require("./models/review");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 let flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -22,8 +27,22 @@ const upload = multer({ dest: 'uploads/' })
 
 
 // Session configuration
+
+const store=MongoStore.create({
+  mongoUrl: Db_Url,
+  crypto: {
+    secret: process.env.secretCode,
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", function(e){
+  console.log("Session store error", e);
+});
+
 let sessionOption = {
-  secret: "mysupersecretstring",
+  store,
+  secret: process.env.secretCode,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -32,6 +51,8 @@ let sessionOption = {
     httpOnly: true,
   },
 };
+
+
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -51,13 +72,42 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // MongoDB connection
-const mong_url = "mongodb://127.0.0.1:27017/wanderlust";
+// const mong_url = "mongodb://127.0.0.1:27017/wanderlust";
+
+console.log("checking is going on");
+
+// console.log(Db_Url);
+
+// async function main() {
+//   await mongoose.connect(Db_Url);
+// }
+// main()
+//   .then(() => console.log("Successful connection"))
+//   .catch((err) => console.log(err));
+
+
 async function main() {
-  await mongoose.connect(mong_url);
+  try {
+    console.log("Connecting to:", process.env.AtlasDB_URL);
+    await mongoose.connect(process.env.AtlasDB_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("✅ MongoDB connection successful");
+
+    // Start server only after DB is connected
+    app.listen(8080, () => {
+      console.log("Server is listening on port 8080");
+    });
+
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+    process.exit(1);
+  }
 }
-main()
-  .then(() => console.log("Successful connection"))
-  .catch((err) => console.log(err));
+
+main();
+
 
 // Routes
 let listingsRouter = require("./routes/listing.js");

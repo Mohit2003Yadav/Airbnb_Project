@@ -119,3 +119,8 @@ footer {
   min-height: 70vh;
   padding-bottom: 2rem;
 }
+
+#map{
+ width:100vh;
+ height: 400px;
+}

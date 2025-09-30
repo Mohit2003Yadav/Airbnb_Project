@@ -25,8 +25,9 @@ router.route("/")
   .get(wrapAsync(listingController.index))          // Show all listings
   .post(
     isLoggedIn,
+    
+    upload.single("listing[image]"),
     validateListings,
-    upload.single("image"),
     wrapAsync(listingController.createListing)      // Create new listing
   );
  
@@ -42,8 +43,9 @@ router.route("/:id")
   .put(
     isLoggedIn,
     isOwner,
-    // validateListings,
-     upload.single("image"),
+   
+     upload.single("listing[image]"),
+      validateListings,
     wrapAsync(listingController.editListing)        // Update listing
   );
 

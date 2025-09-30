@@ -1,3 +1,27 @@
+ <style>
+            .btn-search {
+                background-color: #ff385c;
+                color: white;
+                border-radius: 25px;
+                padding: 0 1rem 0 1rem;
+            }
+            .btn-search:hover {
+                background-color: #ff1e3c;
+                color: white;
+            }
+
+            .searchIcon {
+                margin-right: 0.5rem;
+                display: inline;
+            }
+
+            .search-inp {
+                border-radius: 25px;
+                width: 20rem;
+                padding: 0.25rem 1rem 0.25rem 1rem;
+            }
+ </style>
+ 
  <nav class="navbar navbar-expand-md bg-body-tertiary sticky-top border-bottom">
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><i class="fa-solid fa-bed"></i> Stay-Easy</a>
@@ -7,16 +31,21 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" href="/listings">Home</a>
-        <a class="nav-link" href="/listings">All Listing</a>
-        <a class="nav-link" href="/listings/new">Add new Listings</a>
+      </div>
+      <div class="navbar-nav ms-auto">
+         <form class="d-flex " role="search">
+      <input class="form-control  search-inp me-2 " type="search" placeholder="Search Destination" aria-label="Search"/>
+      <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass  searchIcon"></i>Search</button>
+    </form>
       </div>
 
       <div class="navbar-nav ms-auto">
+          <a class="nav-link" href="/listings/new">Add new Listings</a>
         <% if (currUser) { %>
-          <a class="nav-link" href="/logout">Logout</a>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
         <% } else { %>
-          <a class="nav-link" href="/login">Login</a>
-          <a class="nav-link" href="/signup">Sign Up</a>
+          <a class="nav-link" href="/login"><b>Login</b></a>
+          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
         <% } %>
       </div>
     </div>
