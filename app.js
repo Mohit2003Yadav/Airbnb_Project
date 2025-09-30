@@ -1,10 +1,9 @@
-
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
-};
+}
 
 console.log("DB URL:", process.env.AtlasDB_URL ? "✅ Loaded" : "❌ Not Loaded");
-const Db_Url= process.env.AtlasDB_URL;
+const Db_Url = process.env.AtlasDB_URL;
 
 let express = require("express");
 let app = express();
@@ -20,13 +19,33 @@ let flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
-const multer  = require('multer')
-const upload = multer({ dest: 'uploads/' })
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+// --- MongoDB Connection Setup ---
+
+async function connectToMongo() {
+  try {
+    if (!Db_Url) {
+      throw new Error("AtlasDB_URL environment variable is not set.");
+    }
+    // FIX: Await connection for startup integrity.
+    await mongoose.connect(Db_Url);
+    console.log("✅ MongoDB connection successful");
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+    console.error(err.stack);
+    process.exit(1); // Exit if DB connection fails
+  }
+}
+
+// Start the connection process immediately, saving the promise
+const dbConnectionPromise = connectToMongo();
 
 
-// Session configuration
+// --- Session Configuration ---
 
-const store=MongoStore.create({
+const store = MongoStore.create({
   mongoUrl: Db_Url,
   crypto: {
     secret: process.env.secretCode,
@@ -44,15 +63,15 @@ let sessionOption = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    expire: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    // FIX: Corrected deprecated option 'expire' to 'expires'
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   },
 };
 
 
-
-// Middleware
+// --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -62,55 +81,18 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use(session(sessionOption));
 app.use(flash());
 
-// Passport configuration
+// --- Passport Configuration ---
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// MongoDB connection
-// const mong_url = "mongodb://127.0.0.1:27017/wanderlust";
 
-console.log("checking is going on");
-
-console.log(Db_Url);
-
-async function main() {
-  await mongoose.connect(Db_Url);
-}
-main()
-  .then(() => console.log("Successful connection"))
-  .catch((err) => console.log(err));
-
-
-// async function main() {
-//   try {
-//     console.log("Connecting to:", process.env.AtlasDB_URL);
-//      mongoose.connect(process.env.AtlasDB_URL, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-//     console.log("✅ MongoDB connection successful");
-
-//     // Start server only after DB is connected
-//     app.listen(8080, () => {
-//       console.log("Server is listening on port 8080");
-//     });
-
-//   } catch (err) {
-//     console.error("❌ MongoDB connection failed:", err.message);
-//     process.exit(1);
-//   }
-// }
-
-// main();
-
-
-// Routes
+// --- Routes ---
 let listingsRouter = require("./routes/listing.js");
 let reviewsRouter = require("./routes/review.js");
-let userRouter= require("./routes/user.js");
+let userRouter = require("./routes/user.js");
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
@@ -119,24 +101,34 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // Routers
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
-// Error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack); // helpful for debugging
-  let { status = 500, message = "Something went wrong" } = err;
-  res.status(status).render("error.ejs", { err });
+// ADDED: Explicit Homepage route to prevent 404 on root access (if not in userRouter)
+app.get("/", (req, res) => {
+    res.render("listings/index.ejs"); // Assuming this is your main homepage view
 });
 
-// Catch-all route
+// --- Error Handlers ---
+
+// ADDED: Catch-all route (Restored to handle all undefined paths and log errors)
+app.all(/.*/, (req, res, next) => {
+  next(new ExpressError(404, "Page not found"));
+});
+
+// General Error handler
+app.use((err, req, res, next) => {
+  let { status = 500, message = "Something went wrong" } = err;
+  res.status(status).render("error.ejs", { err: { status, message, stack: err.stack } });
+});
 
 
-
-// Server
-app.listen(8080, () => {
-  console.log("Server is listening on port 8080");
+// --- Server Start (CRITICAL FIX) ---
+// FIX: Server only starts after the database connection promise resolves successfully.
+dbConnectionPromise.then(() => {
+  app.listen(8080, () => {
+    console.log("Server is listening on port 8080 and DB is connected.");
+  });
 });
