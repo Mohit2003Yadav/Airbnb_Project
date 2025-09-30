@@ -2,9 +2,7 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 };
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+
 console.log("DB URL:", process.env.AtlasDB_URL ? "✅ Loaded" : "❌ Not Loaded");
 const Db_Url= process.env.AtlasDB_URL;
 
@@ -76,37 +74,37 @@ passport.deserializeUser(User.deserializeUser());
 
 console.log("checking is going on");
 
-// console.log(Db_Url);
-
-// async function main() {
-//   await mongoose.connect(Db_Url);
-// }
-// main()
-//   .then(() => console.log("Successful connection"))
-//   .catch((err) => console.log(err));
-
+console.log(Db_Url);
 
 async function main() {
-  try {
-    console.log("Connecting to:", process.env.AtlasDB_URL);
-    await mongoose.connect(process.env.AtlasDB_URL, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("✅ MongoDB connection successful");
-
-    // Start server only after DB is connected
-    app.listen(8080, () => {
-      console.log("Server is listening on port 8080");
-    });
-
-  } catch (err) {
-    console.error("❌ MongoDB connection failed:", err.message);
-    process.exit(1);
-  }
+  await mongoose.connect(Db_Url);
 }
+main()
+  .then(() => console.log("Successful connection"))
+  .catch((err) => console.log(err));
 
-main();
+
+// async function main() {
+//   try {
+//     console.log("Connecting to:", process.env.AtlasDB_URL);
+//      mongoose.connect(process.env.AtlasDB_URL, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     });
+//     console.log("✅ MongoDB connection successful");
+
+//     // Start server only after DB is connected
+//     app.listen(8080, () => {
+//       console.log("Server is listening on port 8080");
+//     });
+
+//   } catch (err) {
+//     console.error("❌ MongoDB connection failed:", err.message);
+//     process.exit(1);
+//   }
+// }
+
+// main();
 
 
 // Routes
@@ -121,15 +119,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Demo user creation
-// app.get("/demouser", async (req, res) => {
-//   const fakeuser = new User({
-//     username: "demouser",
-//     email: "demouser@example.com",
-//   });
-//   let registeredUser = await User.register(fakeuser, "yadav123");
-//   res.send(registeredUser);
-// });
 
 // Routers
 app.use("/listings", listingsRouter);
