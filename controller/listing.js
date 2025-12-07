@@ -4,15 +4,12 @@ let mapBoxToken = process.env.MAP_TOKEN;
 let geocodingClient = mbxGeocoding({ accessToken: mapBoxToken });
 module.exports.index = async (req, res) => {
   let list = await Listing.find({});
-  res.render("listing.ejs", { list });
+  res.render("listing", { list }); // or "listings/index" if that file exists
 };
 
 module.exports.renderNewForm = (req, res) => {
   res.render("new.ejs");
 };
-
-
-
 
 module.exports.createListing = async (req, res) => {
   let response = await geocodingClient
@@ -21,8 +18,6 @@ module.exports.createListing = async (req, res) => {
       limit: 1,
     })
     .send();
-
-  
 
   let url = req.file.path;
   let filename = req.file.filename;
@@ -41,9 +36,6 @@ module.exports.createListing = async (req, res) => {
   req.flash("success", "New Listing Created succesfully");
   res.redirect("/listings");
 };
-
-
-
 
 module.exports.showListing = async (req, res) => {
   let { id } = req.params;

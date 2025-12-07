@@ -4,25 +4,20 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-
         }
-
         .filter {
             text-align: center;
             margin-top: 2rem;
             margin-right: 2rem;
             opacity: 0.7;
         }
-
         .filter:hover {
             opacity: 1;
             cursor: pointer;
         }
-
         .taxInfo{
             display: none;
         }
-
         .tax-toggle {
             border: solid 2px rgb(95, 94, 94);
             border-radius: 1rem;
@@ -101,44 +96,37 @@
             </div>
         </div>
         <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mb-4 mt-4">
-            <%for(let item of list){%>
-                <a href="/listings/<%=item._id%>" class="card-link">
+            <% for (let item of list) { %>
+                <a href="/listings/<%= item._id %>" class="card-link text-decoration-none">
                     <div class="card col">
-                        <img src="<%=item.image.url%>" class="card-img-top" alt="..." style="height: 20rem;">
+                        <% if (item.image && item.image.url) { %>
+                          <img src="<%= item.image.url %>" class="card-img-top" alt="<%= item.title || 'Listing image' %>" style="height: 20rem; object-fit: cover;">
+                        <% } else { %>
+                          <img src="/images/placeholder.png" class="card-img-top" alt="No image" style="height: 20rem; object-fit: cover;">
+                        <% } %>
                         <div class="card-img-overlay"></div>
                         <div class="card-body">
                             <p class="card-text">
-                                <b>
-                                    <%= item.title %>
-                                </b><br>
+                                <b><%= item.title %></b><br>
                                 &#8377;<%= item.price ? item.price.toLocaleString("en-IN") : "N/A" %>/night
-                                 &nbsp; <i class="taxInfo"> + 18% GST</i>
-
-
-
+                                &nbsp; <i class="taxInfo"> + 18% GST</i>
+                            </p>
                         </div>
                     </div>
                 </a>
-
-
-
-                <% }%>
+            <% } %>
         </div>
 
     </body>
 
     <script>
-        let taxSwitch = document.getElementById('switchCheckDefault');
-        taxSwitch.addEventListener("click",()=>{
-            let taxInfo=document.getElementsByClassName("taxInfo");
-
-        for(info of taxInfo){
-            if(info.style.display!="inline"){
-                info.style.display="inline";
-            }else{
-                info.style.display="none";
-            }
+        const taxSwitch = document.getElementById('switchCheckDefault');
+        if (taxSwitch) {
+            taxSwitch.addEventListener("click", () => {
+                const taxInfo = document.getElementsByClassName("taxInfo");
+                for (let info of taxInfo) {
+                    info.style.display = (info.style.display !== "inline") ? "inline" : "none";
+                }
+            });
         }
-            
-        })
     </script>
