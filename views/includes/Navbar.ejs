@@ -33,10 +33,19 @@
         <a class="nav-link active" aria-current="page" href="/listings">Home</a>
       </div>
       <div class="navbar-nav ms-auto">
-         <form class="d-flex " role="search">
-      <input class="form-control  search-inp me-2 " type="search" placeholder="Search Destination" aria-label="Search"/>
-      <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass  searchIcon"></i>Search</button>
-    </form>
+        <form class="d-flex" role="search" action="/listings" method="get">
+          <input
+            class="form-control search-inp me-2"
+            type="search"
+            name="search"
+            placeholder="Search destination"
+            aria-label="Search"
+            value="<%= typeof search !== 'undefined' ? search : '' %>"
+          />
+          <button class="btn btn-search" type="submit">
+            <i class="fa-solid fa-magnifying-glass searchIcon"></i>Search
+          </button>
+        </form>
       </div>
 
       <div class="navbar-nav ms-auto">

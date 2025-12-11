@@ -2,9 +2,19 @@ let Listing = require("../models/listing");
 let mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 let mapBoxToken = process.env.MAP_TOKEN;
 let geocodingClient = mbxGeocoding({ accessToken: mapBoxToken });
+
 module.exports.index = async (req, res) => {
-  let list = await Listing.find({});
-  res.render("listing", { list }); // or "listings/index" if that file exists
+  const { search } = req.query;
+
+  // Build a simple regex OR query across commonly searched fields
+  const query = {};
+  if (search && search.trim()) {
+    const regex = new RegExp(search.trim(), "i");
+    query.$or = [{ title: regex }, { location: regex }, { country: regex }, { description: regex }];
+  }
+
+  const list = await Listing.find(query);
+  res.render("listing", { list, search: search || "" });
 };
 
 module.exports.renderNewForm = (req, res) => {

@@ -347,6 +347,486 @@ const sampleListings = [
     location: "Costa Rica",
     country: "Costa Rica",
   },
+  {
+    title: "Cliffside Retreat in Santorini",
+    description:
+      "Whitewashed walls and caldera views make this cliffside suite the perfect Greek escape.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2600,
+    location: "Santorini",
+    country: "Greece",
+  },
+  {
+    title: "Urban Studio near Eiffel Tower",
+    description:
+      "Compact, chic, and steps from the Eiffel Tower—ideal for couples exploring Paris.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1900,
+    location: "Paris",
+    country: "France",
+  },
+  {
+    title: "Riad with Courtyard Pool",
+    description:
+      "Traditional riad featuring a serene courtyard pool and intricate Moroccan design.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505764706515-aa95265c5abc?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1700,
+    location: "Marrakesh",
+    country: "Morocco",
+  },
+  {
+    title: "Countryside Farmstay",
+    description:
+      "Slow down with farm animals, fresh air, and hearty breakfasts in the countryside.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 700,
+    location: "Nashville",
+    country: "United States",
+  },
+  {
+    title: "Minimalist Loft in Berlin",
+    description:
+      "Exposed brick, high ceilings, and hip cafés around the corner—pure Berlin vibe.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1400,
+    location: "Berlin",
+    country: "Germany",
+  },
+  {
+    title: "Riverfront Cabin in Vermont",
+    description:
+      "Watch the river flow from the deck of this snug cabin nestled among the pines.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 950,
+    location: "Vermont",
+    country: "United States",
+  },
+  {
+    title: "Lake Como Terrace Apartment",
+    description:
+      "Wake up to lake breezes and evening aperitivos on your private Como terrace.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2300,
+    location: "Como",
+    country: "Italy",
+  },
+  {
+    title: "Art Loft in Mexico City",
+    description:
+      "Bright, art-filled loft steps away from Roma Norte’s best food and galleries.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484156818044-c040038b0710?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1300,
+    location: "Mexico City",
+    country: "Mexico",
+  },
+  {
+    title: "Desert Dome under the Stars",
+    description:
+      "Glamp in a clear-roof dome with pristine night skies and desert silence.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 850,
+    location: "Joshua Tree",
+    country: "United States",
+  },
+  {
+    title: "Harbor View Flat",
+    description:
+      "Cozy flat overlooking the harbor, perfect for sunset watchers and seafood lovers.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1250,
+    location: "Sydney",
+    country: "Australia",
+  },
+  {
+    title: "Jungle Bungalow",
+    description:
+      "Open-air bungalow with hammock decks and a short walk to hidden waterfalls.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1523419400526-bec6745b3406?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 900,
+    location: "Ubud",
+    country: "Indonesia",
+  },
+  {
+    title: "Icelandic Cabin with Hot Tub",
+    description:
+      "Soak under the Northern Lights in a private hot tub after a day of waterfalls.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2100,
+    location: "Reykjavik",
+    country: "Iceland",
+  },
+  {
+    title: "Canal Boat Stay",
+    description:
+      "Float on a classic canal boat with modern comforts and easy city access.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1150,
+    location: "Amsterdam",
+    country: "Netherlands",
+  },
+  {
+    title: "Hilltop Riad Terrace",
+    description:
+      "Sip mint tea on a rooftop terrace with sweeping views of the old city.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1050,
+    location: "Fes",
+    country: "Morocco",
+  },
+  {
+    title: "Savanna Tent Camp",
+    description:
+      "Luxury tented camp with sunrise game drives and starry-night campfires.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505764706515-aa95265c5abc?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 3200,
+    location: "Maasai Mara",
+    country: "Kenya",
+  },
+  {
+    title: "Snowy Chalet in Hokkaido",
+    description:
+      "Powder skiing by day, onsen by night in this warm timber chalet.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2800,
+    location: "Niseko",
+    country: "Japan",
+  },
+  {
+    title: "Wine Country Cottage",
+    description:
+      "Stroll to vineyards from this cozy cottage with a firepit under the stars.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484156818044-c040038b0710?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1250,
+    location: "Napa",
+    country: "United States",
+  },
+  {
+    title: "Seaside Hut in Goa",
+    description:
+      "Colorful beach hut steps from the sand with laid-back Goan vibes.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 650,
+    location: "Goa",
+    country: "India",
+  },
+  {
+    title: "Stone House in Provence",
+    description:
+      "Lavender fields, rustic stone walls, and long lunches on the patio.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1700,
+    location: "Provence",
+    country: "France",
+  },
+  {
+    title: "City Center Capsule",
+    description:
+      "Smart, compact capsule stay right in the middle of the action.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1523419400526-bec6745b3406?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 400,
+    location: "Seoul",
+    country: "South Korea",
+  },
+  {
+    title: "Floating Villa",
+    description:
+      "Modern villa perched over turquoise waters with direct lagoon access.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 5200,
+    location: "Bora Bora",
+    country: "French Polynesia",
+  },
+  {
+    title: "Redwood Tree Cabin",
+    description:
+      "A-frame nestled among redwoods with giant windows and a wood stove.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1350,
+    location: "Big Sur",
+    country: "United States",
+  },
+  {
+    title: "Old Port Warehouse Loft",
+    description:
+      "Industrial loft with exposed beams set in the heart of the historic port.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1450,
+    location: "Montreal",
+    country: "Canada",
+  },
+  {
+    title: "Andes Hiking Base",
+    description:
+      "Simple, clean basecamp for trekkers exploring the Andes trails.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 600,
+    location: "Cusco",
+    country: "Peru",
+  },
+  {
+    title: "Bright Flat in Barcelona",
+    description:
+      "Sunlit apartment with balconies and Gaudi sights within walking distance.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505764706515-aa95265c5abc?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1550,
+    location: "Barcelona",
+    country: "Spain",
+  },
+  {
+    title: "Coastal Cabin in Cornwall",
+    description:
+      "Clifftop cabin with roaring fireplace and sweeping sea views.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1250,
+    location: "Cornwall",
+    country: "United Kingdom",
+  },
+  {
+    title: "Sahara Desert Camp",
+    description:
+      "Sleep under the stars in a Berber tent after camel rides across dunes.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1523419400526-bec6745b3406?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 950,
+    location: "Merzouga",
+    country: "Morocco",
+  },
+  {
+    title: "Forest Micro Cabin",
+    description:
+      "Tiny but thoughtful cabin design surrounded by whispering pines.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484156818044-c040038b0710?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 550,
+    location: "Oregon",
+    country: "United States",
+  },
+  {
+    title: "Cityscape Penthouse",
+    description:
+      "Floor-to-ceiling windows with sweeping skyline views and a private deck.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1470246973918-29a93221c455?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 3100,
+    location: "Toronto",
+    country: "Canada",
+  },
+  {
+    title: "Mediterranean Stone Villa",
+    description:
+      "Stone arches, shaded courtyards, and olive groves nearby—pure Mediterranean charm.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2400,
+    location: "Mallorca",
+    country: "Spain",
+  },
+  {
+    title: "Cliff Cabin with Glass Wall",
+    description:
+      "Glass-wall living room that frames dramatic cliffs and crashing waves.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2750,
+    location: "Madeira",
+    country: "Portugal",
+  },
+  {
+    title: "Himalayan Homestay",
+    description:
+      "Warm family homestay with mountain views and home-cooked meals.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1523419400526-bec6745b3406?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 500,
+    location: "Manali",
+    country: "India",
+  },
+  {
+    title: "Art District Loft",
+    description:
+      "Warehouse loft drenched in natural light, perfect for creatives and remote work.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1450,
+    location: "Austin",
+    country: "United States",
+  },
+  {
+    title: "Lagoon Edge Cabana",
+    description:
+      "Thatched cabana with kayaks included for exploring the calm lagoon waters.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 800,
+    location: "Placencia",
+    country: "Belize",
+  },
+  {
+    title: "Alpine Tiny House",
+    description:
+      "Cozy tiny house with panoramic alpine views and a firepit outside.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505764706515-aa95265c5abc?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 950,
+    location: "Zermatt",
+    country: "Switzerland",
+  },
+  {
+    title: "Garden Suite in Lisbon",
+    description:
+      "Quiet garden suite tucked behind lively Lisbon streets and pastel facades.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1100,
+    location: "Lisbon",
+    country: "Portugal",
+  },
+  {
+    title: "Rainforest Canopy Pod",
+    description:
+      "Sleep amid rainforest canopy life sounds in a secure, modern pod.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1523419400526-bec6745b3406?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1250,
+    location: "Kandy",
+    country: "Sri Lanka",
+  },
+  {
+    title: "Nordic Seaside Sauna House",
+    description:
+      "Minimalist seaside cabin with private sauna and cold-plunge ladder.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1484156818044-c040038b0710?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1850,
+    location: "Helsinki",
+    country: "Finland",
+  },
+  {
+    title: "Cave Home in Cappadocia",
+    description:
+      "Stay in a carved cave suite and watch hot air balloons at sunrise.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1350,
+    location: "Cappadocia",
+    country: "Turkey",
+  },
+  {
+    title: "Skyline Rooftop Studio",
+    description:
+      "Compact studio with a private rooftop deck overlooking the skyline.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1600,
+    location: "Chicago",
+    country: "United States",
+  },
 ];
 
 module.exports = { data: sampleListings };
