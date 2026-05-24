@@ -2,7 +2,7 @@ const Listing = require("./models/listing");
 const Review = require("./models/review");
 
 
-const { listingSchema, reviewSchema } = require("./schema.js"); // import Joi schemas
+const { listingSchema, reviewSchema, bookingSchema } = require("./schema.js"); // import Joi schemas
 const ExpressError = require("./utils/ExpressError");           // import custom error
 
 module.exports.isLoggedIn = (req, res, next) => {
@@ -54,6 +54,16 @@ module.exports.validateListings = (req, res, next) => {
 
 module.exports.validateReview = (req, res, next) => {
   let { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+};
+
+module.exports.validateBooking = (req, res, next) => {
+  let { error } = bookingSchema.validate(req.body);
   if (error) {
     let errMsg = error.details.map((el) => el.message).join(",");
     throw new ExpressError(400, errMsg);

@@ -1,0 +1,59 @@
+<% layout('/layout/boilerplate') -%>
+
+<div class="row mt-4 mb-5">
+  <div class="col-12 col-lg-8 offset-lg-2">
+    <h3 class="mb-4">Profile</h3>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <%= user.username ? user.username.charAt(0).toUpperCase() : "U" %>
+        </div>
+        <div>
+          <h4 class="mb-1"><%= user.username %></h4>
+          <p class="text-muted mb-0"><%= user.email %></p>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row g-3">
+        <div class="col-12 col-md-6">
+          <div class="profile-detail">
+            <span>Username</span>
+            <strong><%= user.username %></strong>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="profile-detail">
+            <span>Email</span>
+            <strong><%= user.email %></strong>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="profile-detail">
+            <span>Listings created</span>
+            <strong><%= listingCount %></strong>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <div class="profile-detail">
+            <span>Total bookings</span>
+            <strong><%= bookingCount %></strong>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="profile-detail">
+            <span>Account created</span>
+            <strong><%= user._id.getTimestamp().toDateString() %></strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap mt-4">
+        <a href="/bookings" class="btn btn-danger">View bookings</a>
+        <a href="/listings/new" class="btn btn-outline-dark">Add listing</a>
+      </div>
+    </div>
+  </div>
+</div>

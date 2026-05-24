@@ -2,6 +2,7 @@
   <script>
      const mapToken = "<%= process.env.MAP_TOKEN %>";
      const listing = <%- JSON.stringify(item) %>;
+     const bookedRanges = <%- JSON.stringify(bookedRanges || []) %>;
   </script>
 
   <body>
@@ -11,7 +12,7 @@
           <%=item.title%>
         </h3>
       </div>
-      <div class="col-6 offset-2">
+      <div class="col-12 col-lg-6 offset-lg-2">
         <div class="card show-card listing-card">
           <img src="<%=item.image.url%>" class="card-img-top show-img" alt="...">
           <div class="card-body">
@@ -46,6 +47,49 @@
           </div>
           <%}%>
 
+      </div>
+
+      <div class="col-12 col-lg-4 mt-4">
+        <div class="card booking-panel">
+          <div class="card-body">
+            <h5 class="card-title mb-3">Book this stay</h5>
+            <p class="mb-3">&#8377;<%= item.price.toLocaleString("en-IN") %> <span class="text-muted">/ night</span></p>
+
+            <% if(currUser && !currUser._id.equals(item.owner._id)) { %>
+              <form action="/listings/<%=item._id%>/bookings" method="POST" novalidate class="needs-validation booking-form">
+                <div class="mb-3">
+                  <label for="checkIn" class="form-label">Check-in</label>
+                  <input type="date" id="checkIn" name="booking[checkIn]" class="form-control" required>
+                  <div class="invalid-feedback">Please select a check-in date.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="checkOut" class="form-label">Check-out</label>
+                  <input type="date" id="checkOut" name="booking[checkOut]" class="form-control" required>
+                  <div class="invalid-feedback">Please select a check-out date.</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="guests" class="form-label">Guests</label>
+                  <input type="number" id="guests" name="booking[guests]" class="form-control" min="1" max="20" value="1" required>
+                  <div class="invalid-feedback">Please enter at least 1 guest.</div>
+                </div>
+
+                <button class="btn btn-danger w-100">Reserve</button>
+              </form>
+
+              <div class="availability-box mt-4">
+                <h6 class="mb-3">Availability</h6>
+                <div id="availabilityCalendar" class="availability-calendar"></div>
+                <p id="bookingDateError" class="text-danger small mt-3 mb-0 d-none"></p>
+              </div>
+            <% } else if(currUser && currUser._id.equals(item.owner._id)) { %>
+              <p class="text-muted mb-0">Owners cannot book their own listing.</p>
+            <% } else { %>
+              <a href="/login" class="btn btn-danger w-100">Login to reserve</a>
+            <% } %>
+          </div>
+        </div>
       </div>
 
 
@@ -133,4 +177,5 @@
     
 
       <script src="/js/map.js"></script>
+      <script src="/js/booking-calendar.js"></script>
   </body>

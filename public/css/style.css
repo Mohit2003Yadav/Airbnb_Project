@@ -4,20 +4,33 @@ body {
   font-optical-sizing: auto !important;
   font-weight: 500 !important;
   font-style: normal !important;
-
+  background-color: #ffffff !important;
   display: flex;
   flex-direction: column;
   min-height: 100vh;   /* full viewport height */
   margin: 0;           /* remove default browser margin */
 }
 
+.container {
+  max-width: 1180px !important;
+}
+
 /* Navbar */
 .navbar {
-  height: 5rem;
+  min-height: 5rem;
+  padding: 0.5rem 0;
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(12px);
 }
 
 .fa-bed {
   color: #fe424d;
+}
+
+@media (max-width: 767.98px) {
+  .navbar {
+    min-height: auto;
+  }
 }
 
 /* Main content */
@@ -33,8 +46,10 @@ footer {
 
 .f-info {
   text-align: center;
-  height: 8rem;
-  background-color: #ebebeb;
+  min-height: 6rem;
+  padding: 1.25rem 0;
+  background-color: #f7f7f7;
+  border-top: 1px solid #eeeeee;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -61,18 +76,115 @@ footer {
 }
 
 .f-info-socials i {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin-right: 1rem;
 }
 
-/* Card styles */
-.listing-card {
-  border: 1px solid #ddd;
-  border-radius: 1rem;
+/* Listings page */
+.listings-page {
+  padding: 1.25rem 0 2rem;
+}
+
+.listings-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.filters-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0 1.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 0.75rem;
+  scrollbar-width: thin;
+}
+
+.filter {
+  min-width: 5.5rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  color: #666;
+  padding: 0.4rem 0.65rem 0.55rem;
+  text-align: center;
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.filter i {
+  font-size: 1.1rem;
+  margin-bottom: 0.35rem;
+}
+
+.filter span {
+  display: block;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.filter:hover,
+.filter.active {
+  color: #111;
+  border-bottom-color: #111;
+  transform: translateY(-1px);
+}
+
+.taxInfo {
+  display: none;
+  color: #717171;
+  font-size: 0.9rem;
+  margin-left: 0.25rem;
+}
+
+.tax-toggle {
+  border: 1px solid #d8d8d8;
+  border-radius: 999px;
+  padding: 0.65rem 0.9rem;
+  background-color: #fff;
+  box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+}
+
+.listings-grid {
+  align-items: stretch;
+}
+
+.listing-card-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.stay-card {
+  height: 100%;
+  border: 1px solid #e7e7e7;
+  border-radius: 0.9rem;
   overflow: hidden;
-  margin: 1rem;
-  margin-bottom: 2rem;
-  flex: 1 1 18rem;
+  margin: 0;
+  box-shadow: 0 0.4rem 1.25rem rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stay-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0.9rem 2rem rgba(0, 0, 0, 0.11);
+}
+
+.listing-img-wrap {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: #f2f2f2;
 }
 
 .card-img-top {
@@ -85,8 +197,17 @@ footer {
   padding: 0;
 }
 
+.listing-img-wrap .card-img-top {
+  height: 100%;
+  transition: transform 0.25s ease;
+}
+
+.stay-card:hover .card-img-top {
+  transform: scale(1.035);
+}
+
 .card-body {
-  padding: 1rem;
+  padding: 1rem 1.15rem 1.15rem;
 }
 
 .card-title {
@@ -114,6 +235,34 @@ footer {
   opacity: 0.2;
 }
 
+.listing-title {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 750;
+  color: #111;
+  margin-bottom: 0.25rem;
+}
+
+.listing-rating {
+  color: #444;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.listing-rating i {
+  font-size: 0.72rem;
+}
+
+.listing-location {
+  color: #717171;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.listing-price {
+  color: #111;
+}
+
 /* New listing page styles */
 .new-listing-page {
   min-height: 70vh;
@@ -123,4 +272,165 @@ footer {
 #map{
  width:100vh;
  height: 400px;
+}
+
+.booking-panel {
+  border-radius: 0.75rem;
+  position: sticky;
+  top: 6rem;
+}
+
+.booking-card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.booking-img {
+  width: 100%;
+  height: 100%;
+  min-height: 14rem;
+  object-fit: cover;
+}
+
+.booking-details p {
+  margin-bottom: 0.35rem;
+}
+
+.availability-calendar {
+  display: grid;
+  gap: 1rem;
+}
+
+.availability-month {
+  border: 1px solid #e6e6e6;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.availability-month-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.availability-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.availability-day-name,
+.availability-day {
+  min-height: 1.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.35rem;
+  font-size: 0.78rem;
+}
+
+.availability-day-name {
+  color: #717171;
+  font-weight: 700;
+}
+
+.availability-day {
+  background-color: #f7f7f7;
+}
+
+.availability-day.is-booked {
+  background-color: #ffe1e7;
+  color: #b0002a;
+  text-decoration: line-through;
+}
+
+.availability-day.is-past,
+.availability-day.is-empty {
+  background-color: transparent;
+  color: #b0b0b0;
+}
+
+.profile-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.profile-card {
+  border: 1px solid #e6e6e6;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  background-color: #fff;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: #ff385c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.profile-detail {
+  border: 1px solid #eeeeee;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  height: 100%;
+}
+
+.profile-detail span {
+  display: block;
+  color: #717171;
+  font-size: 0.9rem;
+  margin-bottom: 0.35rem;
+}
+
+.profile-detail strong {
+  word-break: break-word;
+}
+
+@media (max-width: 991.98px) {
+  .filters-wrap {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tax-toggle {
+    width: fit-content;
+  }
+
+  .booking-panel {
+    position: static;
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .listings-page {
+    padding-top: 0.75rem;
+  }
+
+  .listings-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filter {
+    min-width: 4.8rem;
+  }
+
+  .filter span {
+    font-size: 0.82rem;
+  }
 }

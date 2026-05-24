@@ -1,4 +1,5 @@
 let Listing = require("../models/listing");
+let Booking = require("../models/booking");
 let mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 let mapBoxToken = process.env.MAP_TOKEN;
 let geocodingClient = mbxGeocoding({ accessToken: mapBoxToken });
@@ -61,7 +62,21 @@ module.exports.showListing = async (req, res) => {
     return res.redirect("/listings"); // ✅ Added return (prevents multiple responses)
   }
 
-  res.render("show.ejs", { item });
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const bookings = await Booking.find({
+    listing: id,
+    status: "confirmed",
+    checkOut: { $gte: today },
+  }).select("checkIn checkOut -_id");
+
+  const bookedRanges = bookings.map((booking) => ({
+    checkIn: booking.checkIn.toISOString().slice(0, 10),
+    checkOut: booking.checkOut.toISOString().slice(0, 10),
+  }));
+
+  res.render("show.ejs", { item, bookedRanges });
 };
 
 module.exports.renderEditForm = async (req, res) => {
@@ -93,6 +108,7 @@ module.exports.editListing = async (req, res) => {
 module.exports.destroyListing = async (req, res) => {
   let { id } = req.params;
   await Listing.findByIdAndDelete(id);
+  await Booking.deleteMany({ listing: id });
   req.flash("success", "Listing Deleted Successfully");
   res.redirect("/listings");
 };

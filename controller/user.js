@@ -1,4 +1,6 @@
 let User = require("../models/user");
+let Listing = require("../models/listing");
+let Booking = require("../models/booking");
 
 module.exports.showSignupForm=(req, res) => {
   res.render("users/signUp.ejs");
@@ -6,6 +8,19 @@ module.exports.showSignupForm=(req, res) => {
 
 module.exports.showLoginForm=(req, res) => {
   res.render("users/login.ejs");
+}
+
+module.exports.showProfile = async (req, res) => {
+  const [listingCount, bookingCount] = await Promise.all([
+    Listing.countDocuments({ owner: req.user._id }),
+    Booking.countDocuments({ guest: req.user._id }),
+  ]);
+
+  res.render("users/profile.ejs", {
+    user: req.user,
+    listingCount,
+    bookingCount,
+  });
 }
 
 module.exports.Signup=async (req, res, next) => {

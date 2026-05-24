@@ -1,136 +1,120 @@
 <% layout('/layout/boilerplate') -%>
-    <style>
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .filter {
-            text-align: center;
-            margin-top: 2rem;
-            margin-right: 2rem;
-            opacity: 0.7;
-        }
-        .filter:hover {
-            opacity: 1;
-            cursor: pointer;
-        }
-        .taxInfo{
-            display: none;
-        }
-        .tax-toggle {
-            border: solid 2px rgb(95, 94, 94);
-            border-radius: 1rem;
-            padding: 1rem;
-            align-items: center;
-            height: 2.5rem;
-            display: flex;
-            margin-left: 0.5rem;
-        }
-    </style>
 
     <body>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <h4 class="mb-0">Explore stays</h4>
+        <div class="listings-page">
+          <div class="listings-toolbar">
             <% if (search && search.trim()) { %>
-                <span class="text-muted">Showing results for "<%= search %>" (<%= list.length %>)</span>
+                <div>
+                    <h4 class="mb-1">Search results</h4>
+                    <p class="text-muted mb-0">Showing results for "<%= search %>" (<%= list.length %>)</p>
+                </div>
             <% } else { %>
-                <span class="text-muted">All listings (<%= list.length %>)</span>
+                <div>
+                    <h4 class="mb-1">Explore stays</h4>
+                    <p class="text-muted mb-0">Find places that feel easy to choose.</p>
+                </div>
             <% } %>
-        </div>
+          </div>
 
-        <div class="filters mt-4 mb-3">
-            <div class="filter">
+        <div class="filters-wrap">
+          <div class="filters">
+            <button class="filter active" type="button">
                 <div><i class="fa-solid fa-fire"></i></div>
-                <p>Trending</p>
-            </div>
+                <span>Trending</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-house"></i></div>
-                <p>Room</p>
-            </div>
+                <span>Rooms</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-building-columns"></i></div>
-                <p>Unique Cities</p>
-            </div>
+                <span>Iconic cities</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-mountain-city"></i></div>
-                <p>Mountains</p>
-            </div>
+                <span>Mountains</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-chess-rook"></i></div>
-                <p>Castles</p>
-            </div>
-            <div class="filter">
+                <span>Castles</span>
+            </button>
+
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-tent"></i></div>
-                <p>Camp</p>
-            </div>
+                <span>Camping</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-snowflake"></i></div>
-                <p>Arctic</p>
-            </div>
+                <span>Arctic</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-umbrella-beach"></i></div>
-                <p>Beaches</p>
-            </div>
+                <span>Beaches</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-sailboat"></i></div>
-                <p>Boating</p>
-            </div>
+                <span>Boating</span>
+            </button>
 
-            <div class="filter">
+            <button class="filter" type="button">
                 <div><i class="fa-solid fa-cow"></i></div>
-                <p>Farms</p>
-            </div>
+                <span>Farms</span>
+            </button>
+          </div>
 
-              <div class="filter">
-                <div><i class="fa-solid fa-sailboat"></i></div>
-                <p>Boating</p>
-            </div>
-
-           
-
-            <div class="tax-toggle">
+            <div class="tax-toggle flex-shrink-0">
                 <div class="form-check-reverse form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-                    <label class="form-check-label" for="switchCheckDefault">Display Total After Taxes </label>
+                    <label class="form-check-label" for="switchCheckDefault">Total after taxes</label>
                 </div>
             </div>
         </div>
-        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mb-4 mt-4">
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 listings-grid">
             <% if (list.length === 0) { %>
-                <div class="col">
+                <div class="col-12">
                     <div class="alert alert-warning">
                         No listings match "<%= search || '' %>". <a href="/listings" class="alert-link">Clear search</a>
                     </div>
                 </div>
             <% } %>
             <% for (let item of list) { %>
-                <a href="/listings/<%= item._id %>" class="card-link text-decoration-none">
-                    <div class="card col">
+                <div class="col">
+                  <a href="/listings/<%= item._id %>" class="listing-card-link">
+                    <div class="card stay-card">
+                        <div class="listing-img-wrap">
                         <% if (item.image && item.image.url) { %>
-                          <img src="<%= item.image.url %>" class="card-img-top" alt="<%= item.title || 'Listing image' %>" style="height: 20rem; object-fit: cover;">
+                          <img src="<%= item.image.url %>" class="card-img-top" alt="<%= item.title || 'Listing image' %>">
                         <% } else { %>
-                          <img src="/images/placeholder.png" class="card-img-top" alt="No image" style="height: 20rem; object-fit: cover;">
+                          <img src="/images/placeholder.png" class="card-img-top" alt="No image">
                         <% } %>
-                        <div class="card-img-overlay"></div>
+                        </div>
                         <div class="card-body">
-                            <p class="card-text">
-                                <b><%= item.title %></b><br>
-                                &#8377;<%= item.price ? item.price.toLocaleString("en-IN") : "N/A" %>/night
-                                &nbsp; <i class="taxInfo"> + 18% GST</i>
+                            <div class="d-flex justify-content-between align-items-start gap-2">
+                              <h5 class="listing-title"><%= item.title %></h5>
+                              <span class="listing-rating"><i class="fa-solid fa-star"></i> New</span>
+                            </div>
+                            <p class="listing-location mb-2">
+                              <%= item.location || "Beautiful stay" %><% if (item.country) { %>, <%= item.country %><% } %>
+                            </p>
+                            <p class="listing-price mb-0">
+                                <b>&#8377;<%= item.price ? item.price.toLocaleString("en-IN") : "N/A" %></b> night
+                                <span class="taxInfo">+ 18% GST</span>
                             </p>
                         </div>
                     </div>
-                </a>
+                  </a>
+                </div>
             <% } %>
         </div>
+      </div>
 
     </body>
 

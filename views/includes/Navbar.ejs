@@ -3,7 +3,10 @@
                 background-color: #ff385c;
                 color: white;
                 border-radius: 25px;
-                padding: 0 1rem 0 1rem;
+                padding: 0.5rem 1rem;
+                white-space: nowrap;
+                border: none;
+                transition: background-color 0.3s ease;
             }
             .btn-search:hover {
                 background-color: #ff1e3c;
@@ -17,41 +20,142 @@
 
             .search-inp {
                 border-radius: 25px;
-                width: 20rem;
-                padding: 0.25rem 1rem 0.25rem 1rem;
+                padding: 0.5rem 1rem;
+                border: 1px solid #ddd;
+                transition: border-color 0.3s ease;
+            }
+
+            .search-inp:focus {
+                border-color: #ff385c;
+                outline: none;
+                box-shadow: 0 0 0 0.2rem rgba(255, 56, 92, 0.25);
+            }
+
+            .navbar-search-form {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .navbar-toggler {
+                border: none;
+                padding: 0.25rem 0.5rem;
+            }
+
+            .navbar-toggler:focus {
+                box-shadow: 0 0 0 0.2rem rgba(255, 56, 92, 0.25);
+            }
+
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2833, 37, 41, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+
+            .navbar-nav {
+                align-items: center;
+            }
+
+            .nav-link {
+                padding: 0.5rem 1rem;
+                transition: color 0.3s ease;
+            }
+
+            .nav-link:hover {
+                color: #ff385c !important;
+            }
+
+            .navbar-brand {
+                font-weight: 600;
+                font-size: 1.25rem;
+                color: #202020 !important;
+                transition: color 0.3s ease;
+            }
+
+            .navbar-brand:hover {
+                color: #ff385c !important;
+            }
+
+            /* Mobile responsive styles */
+            @media (max-width: 767.98px) {
+                .navbar-search-form {
+                    max-width: 100%;
+                    margin-bottom: 1rem;
+                }
+
+                .search-inp {
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+                }
+
+                .btn-search {
+                    width: 100%;
+                    padding: 0.5rem;
+                }
+
+                .navbar-nav {
+                    width: 100%;
+                }
+
+                .nav-link {
+                    padding: 0.75rem 1rem;
+                    text-align: center;
+                }
+
+                .navbar-collapse {
+                    padding-top: 1rem;
+                }
+
+                .navbar-nav .ms-auto {
+                    margin-left: 0 !important;
+                    width: 100%;
+                }
+            }
+
+            @media (min-width: 768px) {
+                .navbar-search-form {
+                    margin-right: 1rem;
+                }
             }
  </style>
  
  <nav class="navbar navbar-expand-md bg-body-tertiary sticky-top border-bottom">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#"><i class="fa-solid fa-bed"></i> Stay-Easy</a>
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-bed"></i> Stay-Easy</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+      <div class="navbar-nav me-auto">
         <a class="nav-link active" aria-current="page" href="/listings">Home</a>
+        <a class="nav-link" href="/listings/new">Add new Listings</a>
       </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search" action="/listings" method="get">
-          <input
-            class="form-control search-inp me-2"
-            type="search"
-            name="search"
-            placeholder="Search destination"
-            aria-label="Search"
-            value="<%= typeof search !== 'undefined' ? search : '' %>"
-          />
-          <button class="btn btn-search" type="submit">
-            <i class="fa-solid fa-magnifying-glass searchIcon"></i>Search
-          </button>
-        </form>
-      </div>
+      
+      <form class="d-flex navbar-search-form" role="search" action="/listings" method="get">
+        <input
+          class="form-control search-inp me-2"
+          type="search"
+          name="search"
+          placeholder="Search destination"
+          aria-label="Search"
+          value="<%= typeof search !== 'undefined' ? search : '' %>"
+        />
+        <button class="btn btn-search" type="submit">
+          <i class="fa-solid fa-magnifying-glass searchIcon"></i><span class="d-none d-sm-inline">Search</span>
+        </button>
+      </form>
 
       <div class="navbar-nav ms-auto">
-          <a class="nav-link" href="/listings/new">Add new Listings</a>
         <% if (currUser) { %>
-          <a class="nav-link" href="/logout"><b>Logout</b></a>
+          <div class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle profile-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-circle-user"></i>
+              <b><%= currUser.username %></b>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/profile"><i class="fa-regular fa-user me-2"></i>Profile</a></li>
+              <li><a class="dropdown-item" href="/bookings"><i class="fa-regular fa-calendar-check me-2"></i>My Bookings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Logout</a></li>
+            </ul>
+          </div>
         <% } else { %>
           <a class="nav-link" href="/login"><b>Login</b></a>
           <a class="nav-link" href="/signup"><b>Sign Up</b></a>

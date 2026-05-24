@@ -6,6 +6,20 @@ if (process.env.NODE_ENV !== "production") {
 console.log("DB URL:", process.env.AtlasDB_URL ? "✅ Loaded" : "❌ Not Loaded");
 const Db_Url = process.env.AtlasDB_URL;
 
+// Helper function to validate MongoDB connection string format
+// Note: If your password contains special characters (@, #, $, %, etc.), 
+// they must be URL-encoded in the connection string (e.g., @ becomes %40)
+function validateMongoUrl(url) {
+  if (!url) return null;
+  
+  // Check if it's a valid MongoDB URL format
+  if (!url.startsWith('mongodb://') && !url.startsWith('mongodb+srv://')) {
+    return null;
+  }
+  
+  return url;
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -30,15 +44,38 @@ async function connectToMongo() {
     if (!Db_Url) {
       throw new Error("AtlasDB_URL environment variable is not set.");
     }
-    // Await connection for startup integrity.
-    await mongoose.connect(Db_Url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    
+    // Validate the connection string format
+    const validatedUrl = validateMongoUrl(Db_Url);
+    const connectionUrl = validatedUrl || Db_Url;
+    
+    // Validate connection string format
+    if (!connectionUrl.startsWith('mongodb://') && !connectionUrl.startsWith('mongodb+srv://')) {
+      throw new Error("Invalid MongoDB connection string format. Must start with 'mongodb://' or 'mongodb+srv://'");
+    }
+    
+    // Remove deprecated options - they are no longer needed in mongoose 8.x
+    // useNewUrlParser and useUnifiedTopology are deprecated and have no effect
+    await mongoose.connect(connectionUrl);
     console.log("✅ MongoDB connection successful");
   } catch (err) {
     console.error("❌ MongoDB connection failed:", err.message);
-    console.error(err.stack);
+    
+    // Provide helpful error messages for common issues
+    if (err.message.includes('authentication failed') || err.message.includes('bad auth')) {
+      console.error("💡 Authentication Error Tips:");
+      console.error("   1. Check if your MongoDB username and password are correct");
+      console.error("   2. Ensure special characters in password are URL-encoded (e.g., @ becomes %40)");
+      console.error("   3. Verify the database user has proper permissions");
+      console.error("   4. Check if your IP address is whitelisted in MongoDB Atlas");
+    } else if (err.message.includes('ENOTFOUND') || err.message.includes('getaddrinfo')) {
+      console.error("💡 Network Error Tips:");
+      console.error("   1. Check your internet connection");
+      console.error("   2. Verify the MongoDB host address is correct");
+      console.error("   3. Check if MongoDB Atlas cluster is running");
+    }
+    
+    console.error("Full error:", err);
     process.exit(1); // Exit if DB connection fails
   }
 }
@@ -46,25 +83,12 @@ async function connectToMongo() {
 // Start the connection process immediately
 const dbConnectionPromise = connectToMongo();
 
-// --- Views configuration & debug (robust for various deploy layouts) ---
+// --- Views configuration ---
 const viewsDir = path.join(process.cwd(), "views");
 app.set("view engine", "ejs");
 app.set("views", viewsDir);
 
 // Debug logs — remove these after verifying deployment
-console.log("===== EXPRESS VIEWS DEBUG =====");
-console.log("process.cwd():", process.cwd());
-console.log("__dirname:", __dirname);
-console.log('app.get("views"):', app.get("views"));
-console.log(
-  "listings/index.ejs exists?:",
-  fs.existsSync(path.join(app.get("views"), "listings", "index.ejs"))
-);
-console.log(
-  "views root listing:",
-  fs.existsSync(app.get("views")) ? fs.readdirSync(app.get("views")) : "views folder not found"
-);
-console.log("================================");
 
 // --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
@@ -73,20 +97,36 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(process.cwd(), "public"))); // use process.cwd() to match views usage
 
 // --- Session Configuration ---
-const store = MongoStore.create({
-  mongoUrl: Db_Url,
-  crypto: {
-    secret: process.env.secretCode || "defaultSecretForDev",
-  },
-  touchAfter: 24 * 3600,
-});
+// Only create Mongo-backed sessions in production. In development, the
+// default in-memory session store avoids a second DB connection during startup.
+let store = null;
+if (Db_Url && process.env.NODE_ENV === "production") {
+  try {
+    // Use validated URL for session store as well
+    const validatedUrl = validateMongoUrl(Db_Url);
+    const sessionStoreUrl = validatedUrl || Db_Url;
+    
+    store = MongoStore.create({
+      mongoUrl: sessionStoreUrl,
+      crypto: {
+        secret: process.env.secretCode || "defaultSecretForDev",
+      },
+      touchAfter: 24 * 3600,
+    });
 
-store.on("error", function (e) {
-  console.log("Session store error", e);
-});
+    store.on("error", function (e) {
+      console.error("❌ Session store error:", e.message);
+    });
+    
+    store.on("connected", function () {
+      console.log("✅ Session store connected");
+    });
+  } catch (err) {
+    console.error("❌ Failed to create session store:", err.message);
+  }
+}
 
 const sessionOption = {
-  store,
   secret: process.env.secretCode || "defaultSecretForDev",
   resave: false,
   saveUninitialized: false,
@@ -95,8 +135,15 @@ const sessionOption = {
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: "lax",
   },
 };
+
+// Only add store if it was successfully created
+if (store) {
+  sessionOption.store = store;
+}
 
 app.use(session(sessionOption));
 app.use(flash());
@@ -112,6 +159,7 @@ passport.deserializeUser(User.deserializeUser());
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const bookingRouter = require("./routes/booking.js");
 
 // --- Flash + current user middleware ---
 app.use((req, res, next) => {
@@ -124,18 +172,12 @@ app.use((req, res, next) => {
 // Mount routers (order matters)
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", bookingRouter);
 app.use("/", userRouter);
 
-// --- Homepage route: render the listings index view ---
-// NOTE: Render the same view path your app expects: views/listings/index.ejs
-app.get("/", async (req, res, next) => {
-  try {
-    const listings = await Listing.find({});
-    // render views/listings/index.ejs and pass listings
-    return res.render("listings/index", { list: listings });
-  } catch (e) {
-    next(e);
-  }
+// --- Homepage route ---
+app.get("/", (req, res) => {
+  res.redirect("/listings");
 });
 
 // --- Catch-all and Error Handlers ---
