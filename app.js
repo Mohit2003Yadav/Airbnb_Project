@@ -20,7 +20,9 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 
-// Routers
+const ejsMate = require("ejs-mate");
+
+// ================= ROUTERS =================
 const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
@@ -46,23 +48,33 @@ async function connectDB() {
 
     console.log("✅ MongoDB Connected");
   } catch (err) {
-    console.error("❌ MongoDB Connection Error:");
+    console.error(
+      "❌ MongoDB Connection Error:"
+    );
     console.error(err.message);
     process.exit(1);
   }
 }
 
-// ================= VIEWS =================
+// ================= VIEW ENGINE =================
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.engine("ejs", require("ejs-mate"));
+app.set(
+  "views",
+  path.join(__dirname, "views")
+);
+app.engine("ejs", ejsMate);
 
 // ================= MIDDLEWARE =================
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(
+  express.static(
+    path.join(__dirname, "public")
+  )
+);
 
-// ================= SESSION =================
+// ================= SESSION STORE =================
 const store = MongoStore.create({
   mongoUrl: Db_Url,
   crypto: {
@@ -73,8 +85,11 @@ const store = MongoStore.create({
   touchAfter: 24 * 3600,
 });
 
-store.on("error", () => {
-  console.log("❌ Mongo Session Store Error");
+store.on("error", (err) => {
+  console.log(
+    "❌ Mongo Session Store Error",
+    err
+  );
 });
 
 const sessionOptions = {
@@ -86,12 +101,15 @@ const sessionOptions = {
   saveUninitialized: false,
   cookie: {
     expires: new Date(
-      Date.now() + 7 * 24 * 60 * 60 * 1000
+      Date.now() +
+        7 * 24 * 60 * 60 * 1000
     ),
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge:
+      7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure:
-      process.env.NODE_ENV === "production",
+      process.env.NODE_ENV ===
+      "production",
     sameSite: "lax",
   },
 };
@@ -104,7 +122,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(
-  new LocalStrategy(User.authenticate())
+  new LocalStrategy(
+    User.authenticate()
+  )
 );
 
 passport.serializeUser(
@@ -115,49 +135,80 @@ passport.deserializeUser(
   User.deserializeUser()
 );
 
-// ================= LOCALS =================
+// ================= GLOBAL LOCALS =================
 app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  res.locals.currUser = req.user;
+  res.locals.success =
+    req.flash("success");
+
+  res.locals.error =
+    req.flash("error");
+
+  res.locals.currUser =
+    req.user;
+
   next();
 });
 
 // ================= ROUTES =================
-app.use("/listings", listingsRouter);
-app.use("/listings/:id/reviews", reviewsRouter);
-app.use("/", bookingRouter);
+app.use(
+  "/listings",
+  listingsRouter
+);
+
+app.use(
+  "/listings/:id/reviews",
+  reviewsRouter
+);
+
+app.use("/bookings", bookingRouter);
+
 app.use("/", userRouter);
 
-// ================= HOME =================
+// ================= HOME ROUTE =================
 app.get("/", (req, res) => {
+  req.flash(
+    "success",
+    "Welcome to Airbnb!"
+  );
+
   res.redirect("/listings");
 });
 
+// ================= 404 HANDLER =================
+app.all("*", (req, res, next) => {
+  next(
+    new ExpressError(
+      404,
+      "Page Not Found"
+    )
+  );
+});
+
 // ================= ERROR HANDLER =================
-app.all(/.*/, (req, res, next) => {
-  next(new ExpressError(404, "Page Not Found"));
-});
+app.use(
+  (err, req, res, next) => {
+    let {
+      status = 500,
+      message =
+        "Something went wrong",
+    } = err;
 
-app.use((err, req, res, next) => {
-  let {
-    status = 500,
-    message = "Something went wrong",
-  } = err;
-
-  res
-    .status(status)
-    .render("error.ejs", {
-      err: {
-        status,
-        message,
-      },
-    });
-});
+    res.status(status).render(
+      "error.ejs",
+      {
+        err: {
+          status,
+          message,
+        },
+      }
+    );
+  }
+);
 
 // ================= SERVER =================
 connectDB().then(() => {
-  const PORT = process.env.PORT || 8080;
+  const PORT =
+    process.env.PORT || 8080;
 
   app.listen(PORT, () => {
     console.log(
